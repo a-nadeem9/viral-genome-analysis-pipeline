@@ -8,8 +8,22 @@ A complete Snakemake pipeline for Human Adenovirus genome assembly, comparative 
 
 You start with raw paired-end sequencing reads (FASTQ files) from one or more adenovirus samples. The pipeline takes them all the way from raw reads to publication-quality figures showing how different your virus strains are from each other.
 
+> [!TIP]
+> This workflow is designed for Human Adenovirus, but the same general approach can be adapted for other DNA virus genomes with a suitable reference genome.
+
+### Example Figures
+
+### Sequence variability plot
+
+![Sequence variability plot](figures/variability_plot.png)
+
+### Phylogenetic tree
+
+![Phylogenetic tree](figures/tree.png)
+
 ### Step-by-step overview
 
+![Pipeline Flowchart](figures/pipeline-flowchart.png)
 ```
 Raw reads (FASTQ)
      │
