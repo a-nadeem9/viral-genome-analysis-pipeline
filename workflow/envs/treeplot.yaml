@@ -1,0 +1,12 @@
+# workflow/envs/treeplot.yaml
+name: treeplot
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - toytree=3.0.10
+  - toyplot=2.0.0
+  - biopython=1.70
+  - matplotlib=3.10.3
+  - python=3.10

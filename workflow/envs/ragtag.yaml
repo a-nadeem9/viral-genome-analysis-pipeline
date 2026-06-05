@@ -1,0 +1,9 @@
+# workflow/envs/ragtag.yaml
+name: ragtag
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.7
+  - ragtag=2.1.0

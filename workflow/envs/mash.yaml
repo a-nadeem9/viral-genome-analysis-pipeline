@@ -1,0 +1,4 @@
+name: mash
+channels: [bioconda, conda-forge]
+dependencies:
+  - mash=2.3

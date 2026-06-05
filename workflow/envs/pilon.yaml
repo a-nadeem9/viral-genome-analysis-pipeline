@@ -1,0 +1,8 @@
+name: pilon
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - pilon=1.24
+  - openjdk=17
+# samtools removed — it isn’t needed inside this env

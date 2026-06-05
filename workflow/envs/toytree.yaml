@@ -1,0 +1,10 @@
+# workflow/envs/toytree.yaml
+name: toytree_plot
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - toytree=3.0.10
+  - toyplot=2.0.0
+  - python=3.10

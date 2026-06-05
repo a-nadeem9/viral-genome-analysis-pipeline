@@ -1,0 +1,60 @@
+# workflow/Snakefile
+
+configfile: "config/config.yaml"
+
+import pandas as pd
+
+samples_df = pd.read_csv(config["samples_tsv"], sep=r"\s+", header=0)
+SAMPLES    = samples_df["sample"].tolist()
+
+# ---------- folder layout (hardcoded — not user-configurable) ----------
+QC_TRIM_DIR  = "results/qc/trimmed"
+QC_DECONT_DIR = "results/qc/decont"
+ASSEMBLY_DIR  = "results/assembly"
+MSA_DIR       = "results/msa"
+VAR_DIR       = "results/variability"
+PLOTS_DIR     = "results/plots"
+MULTIQC_DIR   = "results/multiqc"
+KRAKEN_DIR    = "results/kraken"
+REFSEL_DIR    = "results/reference_selection"
+PATCH_DIR     = "results/patch"
+CONS_DIR      = "results/consensus"
+
+# make globals visible to included rule files
+globals().update(locals())
+
+# ---------- include rule files ----------
+include: "rules/common.smk"           # input functions — must be first
+include: "rules/qc.smk"
+include: "rules/decontam.smk"
+include: "rules/assembly.smk"
+include: "rules/polish.smk"
+include: "rules/assembly_stats.smk"
+include: "rules/msa.smk"
+include: "rules/variability.smk"
+include: "rules/phylogeny.smk"
+include: "rules/multiqc.smk"
+include: "rules/kraken.smk"
+include: "rules/reference_pipeline.smk"
+
+# ---------- final targets ----------
+# Only list true end-products — intermediates are inferred by Snakemake.
+KRAKEN_DB = config["kraken2_db"]
+PIPE_ON   = (
+    str(config.get("enable_reference_pipeline", True)).lower() in {"true", "1", "yes"}
+    and config.get("candidates_fasta", "") != ""
+)
+
+rule all:
+    input:
+        # publication-quality plots (triggers variability + phylogeny + MSA)
+        f"{PLOTS_DIR}/variability_clean.png",
+        f"{PLOTS_DIR}/tree_clean.png",
+        # assembly statistics
+        f"{PLOTS_DIR}/assembly_stats.png",
+        # QC report
+        f"{MULTIQC_DIR}/fastp_report.html",
+        # optional: kraken taxonomic screen
+        *([f"{KRAKEN_DIR}/multiqc/kraken_report.html"] if KRAKEN_DB else []),
+        # optional: per-sample consensus sequences
+        *(expand(f"{CONS_DIR}/{{sample}}/consensus.fasta", sample=SAMPLES) if PIPE_ON else []),

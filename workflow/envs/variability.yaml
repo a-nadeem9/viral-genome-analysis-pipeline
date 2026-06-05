@@ -1,0 +1,9 @@
+# workflow/envs/variability.yaml
+name: variability
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - biopython=1.79
+  - matplotlib-base
+  - seaborn=0.13.2

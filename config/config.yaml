@@ -1,0 +1,41 @@
+# ---------- INPUTS ----------
+adapter_path: "resources/adapters/TruSeq3-PE.fa"
+samples_tsv:  "config/samples.tsv"
+reference:    "data/reference/ref.fasta"
+
+# ---------- STEPS ----------
+contaminants_fasta: ""         # empty = skip de-contamination
+kraken2_db:         ""         # empty = skip kraken screen
+enable_polishing:   true       # set false to skip Pilon
+enable_reference_pipeline: true
+candidates_fasta: "resources/reference/candidates.fasta"
+
+# ---------- PARAMETERS ----------
+parameters:
+  fastp:
+    qualified_quality_phred:    15
+    unqualified_percent_limit:  40
+    n_base_limit:               5
+    length_required:            50
+    detect_adapter_for_pe:      true
+
+  spades:
+    threads: 8
+    memory:  16
+
+  ragtag:
+    threads: 8
+
+  mafft:
+    threads: 8
+
+  variability:
+    window_size: 100
+
+  iqtree:
+    threads: 4
+
+  pilon:
+    threads: 4
+
+consensus_min_depth: 5    # positions below this depth get N in consensus (avoids REF BIAS)

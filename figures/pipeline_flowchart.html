@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pipeline Flowchart</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .pipeline { width: 880px; }
+
+  .title { text-align: center; margin-bottom: 20px; }
+  .title h1 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.4px;
+  }
+  .title .sub {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  /* ── Phases ── */
+  .phase {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 4px;
+    border: 1px solid;
+  }
+
+  .phase-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 9px;
+    padding-left: 9px;
+    border-left: 2.5px solid;
+  }
+
+  .p-in  { background: #f8fafc; border-color: #e2e8f0; }
+  .p-in .phase-label { color: #6366f1; border-color: #6366f1; }
+
+  .p-qc { background: #f0fdfa; border-color: #ccfbf1; }
+  .p-qc .phase-label { color: #0d9488; border-color: #0d9488; }
+
+  .p-asm { background: #faf5ff; border-color: #e9d5ff; }
+  .p-asm .phase-label { color: #7c3aed; border-color: #7c3aed; }
+
+  .p-ref { background: #fff1f2; border-color: #fecdd3; }
+  .p-ref .phase-label { color: #e11d48; border-color: #e11d48; }
+
+  .p-cmp { background: #fffbeb; border-color: #fde68a; }
+  .p-cmp .phase-label { color: #b45309; border-color: #d97706; }
+
+  .p-out { background: #1e293b; border-color: #334155; }
+  .p-out .phase-label { color: #94a3b8; border-color: #64748b; }
+
+  /* ── Nodes ── */
+  .nodes { display: flex; gap: 7px; justify-content: center; align-items: stretch; }
+
+  .node {
+    border-radius: 7px;
+    padding: 8px 10px;
+    text-align: center;
+    flex: 1;
+    max-width: 160px;
+  }
+
+  /* Light-phase nodes */
+  .p-in .node  { background: #fff; border: 1px solid #e2e8f0; }
+  .p-qc .node  { background: #fff; border: 1px solid #ccfbf1; }
+  .p-asm .node { background: #fff; border: 1px solid #e9d5ff; }
+  .p-ref .node { background: #fff; border: 1px solid #fecdd3; }
+  .p-cmp .node { background: #fff; border: 1px solid #fde68a; }
+
+  /* Dark-phase nodes */
+  .p-out .node { background: #334155; border: 1px solid #475569; }
+  .p-out .node-name { color: #f1f5f9; }
+  .p-out .node-tool { color: #64748b; }
+
+  .node-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.3;
+  }
+  .node-tool {
+    font-size: 8.5px;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ── Arrows ── */
+  .arrow-sep { display: flex; justify-content: center; align-items: center; height: 24px; }
+
+  .fa { color: #d1d5db; font-size: 13px; display: flex; align-items: center; padding: 0 3px; }
+
+  /* ── Side branch ── */
+  .with-side { display: flex; gap: 7px; align-items: center; justify-content: center; }
+  .sa {
+    width: 16px; height: 1px; background: #d1d5db;
+    position: relative;
+    margin: 0 8px;
+  }
+  .sa::after {
+    content: '';
+    position: absolute;
+    right: -3px; top: -3px;
+    border-left: 4px solid #d1d5db;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+  }
+  .sn { max-width: 105px; min-width: 105px; padding: 6px 8px; }
+  .sn .node-name { font-size: 9px; }
+  .sn .node-tool { font-size: 7.5px; }
+
+  /* ── Fork ── */
+  .fw { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .fb { display: flex; align-items: center; gap: 3px; }
+  .fl { width: 60px; height: 1px; background: #d1d5db; }
+  .fd { width: 4px; height: 4px; border-radius: 50%; background: #d97706; }
+
+  @media print {
+    body { background: #fff; }
+    .p-out { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="pipeline">
+  <div class="title">
+    <h1>Adenovirus Genome Assembly & Comparative Analysis</h1>
+    <div class="sub">Snakemake Pipeline &middot; 9 Clinical Isolates &middot; 107 Steps</div>
+  </div>
+
+  <div class="phase p-in">
+    <div class="phase-label">Input</div>
+    <div class="nodes">
+      <div class="node"><div class="node-name">Paired-End<br>Illumina Reads</div><div class="node-tool">n = 9 isolates</div></div>
+      <div class="node"><div class="node-name">Reference<br>Genome</div><div class="node-tool">FASTA</div></div>
+      <div class="node"><div class="node-name">Candidate<br>References</div><div class="node-tool">multi-FASTA</div></div>
+    </div>
+  </div>
+
+  <div class="arrow-sep">
+    <svg width="10" height="24" viewBox="0 0 10 24" style="display: block;">
+      <line x1="5" y1="4" x2="5" y2="16" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round"></line>
+      <path d="M 2 13 L 5 17 L 8 13" stroke="#d1d5db" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </div>
+
+  <div class="phase p-qc">
+    <div class="phase-label">Quality Control</div>
+    <div class="nodes">
+      <div class="node"><div class="node-name">Adapter Trimming &<br>Quality Filtering</div><div class="node-tool">fastp</div></div>
+      <div class="fa">&rarr;</div>
+      <div class="node"><div class="node-name">Aggregate<br>QC Report</div><div class="node-tool">MultiQC</div></div>
+    </div>
+  </div>
+
+  <div class="arrow-sep">
+    <svg width="10" height="24" viewBox="0 0 10 24" style="display: block;">
+      <line x1="5" y1="4" x2="5" y2="16" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round"></line>
+      <path d="M 2 13 L 5 17 L 8 13" stroke="#d1d5db" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </div>
+
+  <div class="phase p-asm">
+    <div class="phase-label">De Novo Assembly & Polishing</div>
+    <div class="nodes">
+      <div class="node"><div class="node-name">De Novo<br>Assembly</div><div class="node-tool">SPAdes</div></div>
+      <div class="fa">&rarr;</div>
+      <div class="node"><div class="node-name">Reference-Guided<br>Scaffolding</div><div class="node-tool">RagTag</div></div>
+      <div class="fa">&rarr;</div>
+      <div class="node"><div class="node-name">Short-Read<br>Polishing</div><div class="node-tool">Bowtie2 + Pilon</div></div>
+      <div class="fa">&rarr;</div>
+      <div class="node"><div class="node-name">Assembly<br>Statistics</div><div class="node-tool">SeqKit</div></div>
+    </div>
+  </div>
+
+  <div class="arrow-sep">
+    <svg width="10" height="24" viewBox="0 0 10 24" style="display: block;">
+      <line x1="5" y1="4" x2="5" y2="16" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round"></line>
+      <path d="M 2 13 L 5 17 L 8 13" stroke="#d1d5db" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </div>
+
+  <div class="phase p-ref">
+    <div class="phase-label">Reference-Guided Consensus</div>
+    <div class="nodes">
+      <div class="node"><div class="node-name">Best Reference<br>Selection</div><div class="node-tool">Mash</div></div>
+      <div class="fa">&rarr;</div>
+      <div class="node"><div class="node-name">Gap Patching</div><div class="node-tool">RagTag patch</div></div>
+      <div class="fa">&rarr;</div>
+      <div class="node"><div class="node-name">Read<br>Mapping</div><div class="node-tool">Bowtie2</div></div>
+      <div class="fa">&rarr;</div>
+      <div class="node"><div class="node-name">Consensus<br>Calling</div><div class="node-tool">samtools mpileup</div></div>
+    </div>
+  </div>
+
+  <div class="arrow-sep">
+    <svg width="10" height="24" viewBox="0 0 10 24" style="display: block;">
+      <line x1="5" y1="4" x2="5" y2="16" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round"></line>
+      <path d="M 2 13 L 5 17 L 8 13" stroke="#d1d5db" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </div>
+
+  <div class="phase p-cmp">
+    <div class="phase-label">Comparative Genomics</div>
+    <div class="fw">
+      <div class="node" style="max-width:200px;"><div class="node-name">Multiple Sequence Alignment</div><div class="node-tool">MAFFT</div></div>
+      <svg width="407" height="15" viewBox="0 0 407 15" style="display: block; margin: 0 auto;">
+        <line x1="203.5" y1="0" x2="203.5" y2="7.5" stroke="#d1d5db" stroke-width="1.5" />
+        <line x1="100" y1="7.5" x2="307" y2="7.5" stroke="#d1d5db" stroke-width="1.5" />
+        <circle cx="203.5" cy="7.5" r="3" fill="#d97706" />
+        <line x1="100" y1="7.5" x2="100" y2="15" stroke="#d1d5db" stroke-width="1.5" />
+        <line x1="307" y1="7.5" x2="307" y2="15" stroke="#d1d5db" stroke-width="1.5" />
+      </svg>
+      <div class="nodes">
+        <div class="node"><div class="node-name">Genomic Variability</div><div class="node-tool">Shannon Entropy</div></div>
+        <div class="node"><div class="node-name">Phylogenetic Inference</div><div class="node-tool">IQ-TREE2 &middot; GTR+&Gamma; &middot; UFBoot</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-sep">
+    <svg width="10" height="24" viewBox="0 0 10 24" style="display: block;">
+      <line x1="5" y1="4" x2="5" y2="16" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round"></line>
+      <path d="M 2 13 L 5 17 L 8 13" stroke="#d1d5db" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </div>
+
+  <div class="phase p-out">
+    <div class="phase-label">Outputs</div>
+    <div class="nodes">
+      <div class="node"><div class="node-name">Consensus<br>Genomes</div><div class="node-tool">FASTA</div></div>
+      <div class="node"><div class="node-name">Variability<br>Plot</div><div class="node-tool">PNG</div></div>
+      <div class="node"><div class="node-name">Phylogenetic<br>Tree</div><div class="node-tool">Newick + PNG</div></div>
+      <div class="node"><div class="node-name">Assembly<br>Stats</div><div class="node-tool">TSV + PNG</div></div>
+      <div class="node"><div class="node-name">QC<br>Report</div><div class="node-tool">HTML</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
