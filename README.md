@@ -2,8 +2,6 @@
 
 A complete Snakemake pipeline for Human Adenovirus genome assembly, comparative genomics, and phylogenetic analysis.
 
----
-
 ## What does this pipeline do?
 
 You start with raw paired-end sequencing reads (FASTQ files) from one or more adenovirus samples. The pipeline takes them all the way from raw reads to publication-quality figures showing how different your virus strains are from each other.
@@ -163,7 +161,6 @@ consensus_min_depth: 5     # positions with fewer reads than this get 'N'
 ### 3. Add candidate reference genomes (for consensus calling)
 
 Place a FASTA file containing representative adenovirus reference genomes at `resources/reference/candidates.fasta`. The pipeline will automatically select the best-matching reference for each sample using Mash distance.
----
 
 ## Outputs
 
@@ -178,10 +175,10 @@ All results are written to the `results/` directory.
 | `results/msa/aligned_scaffolds.fasta` | Multiple sequence alignment |
 | `results/msa/tree.nwk` | Phylogenetic tree (Newick format) |
 | `results/variability/variability_windowed.txt` | Per-window variability scores |
-| `results/plots/variability_clean.png` | 🎨 Genome variability figure |
-| `results/plots/tree_clean.png` | 🎨 Phylogenetic tree figure |
-| `results/multiqc/fastp_report.html` | 📊 QC summary report |
-| `results/kraken/multiqc/kraken_report.html` | 📊 Taxonomic screening report (if enabled) |
+| `results/plots/variability_clean.png` | Genome variability figure |
+| `results/plots/tree_clean.png` | Phylogenetic tree figure |
+| `results/multiqc/fastp_report.html` | QC summary report |
+| `results/kraken/multiqc/kraken_report.html` | Taxonomic screening report (if enabled) |
 
 ---
 
@@ -198,4 +195,3 @@ The `candidates.fasta` file contains full genomes from 8 Human Adenovirus strain
 - Human Adenovirus 1
 - Human Adenovirus 2
 
----
